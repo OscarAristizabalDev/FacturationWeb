@@ -1,14 +1,16 @@
-import { Component, OnInit } from '@angular/core';
-import { AbstractControl, Form, FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { Customer } from 'src/app/entities/customer';
-import { CustomerService } from '../../services/customer.service';
-import { AccountService } from '../../services/account.service';
+import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
+import { AbstractControl, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { DxSelectBoxComponent } from 'devextreme-angular';
+
 import { Account } from 'src/app/entities/account';
+import { Customer } from 'src/app/entities/customer';
 import { Product } from '../../entities/product';
 
-import { ProductService } from '../../services/product.service';
 import { AccountDetail } from '../../entities/account-detail';
 import { CommunicationService } from 'src/app/services/communication.service';
+import { CustomerService } from '../../services/customer.service';
+
+
 
 @Component({
   selector: 'app-account',
@@ -16,6 +18,8 @@ import { CommunicationService } from 'src/app/services/communication.service';
   styleUrls: ['./account.component.scss']
 })
 export class AccountComponent implements OnInit {
+
+  @ViewChild('customer') customerSelect: DxSelectBoxComponent;
 
   customers: Customer[] = [];
   products: Product[] = [];
@@ -39,8 +43,6 @@ export class AccountComponent implements OnInit {
 
   constructor(
     private customerService: CustomerService,
-    private accountService: AccountService,
-    private productService: ProductService,
     private communicationService: CommunicationService,
     private formBuilder: FormBuilder) {
   }
@@ -57,6 +59,9 @@ export class AccountComponent implements OnInit {
     this.customerService.getAllCustomer().subscribe((data: Customer[]) => {
       this.customers = data;
     });
+    this.communicationService.cancelAccount$.subscribe(value => {
+      if(value) this.customerSelect.disabled = false;
+    })
   }
 
   /**
@@ -72,13 +77,13 @@ export class AccountComponent implements OnInit {
   }
 
   /**
-   * Permite mostrar el formulario para agregar un producto
+   * Permite agregar un cliente a la cuenta
    */
-  saveFormProduct({ value }: FormGroup) {
+   saveCustomer({ value }: FormGroup) {
     this.account = new Account();
     this.account.customerId = value['customerId'];
     this.account.accountDate = value['accountDate'];
-    this.isAddProduct = true;
+    this.customerSelect.disabled = true;
 
     this.communicationService.notifyAccount(this.account);
   }

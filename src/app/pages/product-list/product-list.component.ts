@@ -19,7 +19,6 @@ export class ProductListComponent implements OnInit {
   accountDetails: AccountDetail[] = [];
 
   constructor(
-    private formBuilder: FormBuilder,
     private accountService: AccountService,
     private communicationService: CommunicationService) { }
 
@@ -39,15 +38,21 @@ export class ProductListComponent implements OnInit {
    */
    addAccount() {
 
-    //let account = new Account();
-    // this.account.customerId = value['customerId'];
-    // this.account.accountDate = value['accountDate'];
     this.account.accountDetails = this.accountDetails;
 
     this.accountService.addAccount(this.account).subscribe(data => {
       this.accountDetails = [];
 
     });
+  }
+
+  /**
+   * Permite cancelar una compra
+   */
+  cancelAccount(){
+    this.account = null;
+    this.accountDetails = [];
+    this.communicationService.nofityCancellAccount(true);
   }
 
 }

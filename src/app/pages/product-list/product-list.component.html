@@ -12,5 +12,5 @@
 </dx-data-grid>
 <br>
 <br>
-<!-- <dx-button icon="check" text="Registrar factura" type="success" [disabled]="!accountForm.valid || accountDetails.length == 0" (onClick)="addAccount($event, accountForm)"></dx-button> -->
-<dx-button icon="check" text="Registrar factura" type="success" [disabled]="accountDetails.length == 0" (onClick)="addAccount()"></dx-button>
+<dx-button icon="check" text="Registrar compra" type="success" [disabled]="accountDetails.length == 0" (onClick)="addAccount()"></dx-button>
+<dx-button icon="remove" text="Cancelar compra" [disabled]="accountDetails.length == 0" (onClick)="cancelAccount()"></dx-button>

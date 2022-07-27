@@ -15,11 +15,10 @@ export class CommunicationService {
   private accountDetailSubject = new Subject<AccountDetail>();
   public dataAccountDetail$: Observable<AccountDetail> = this.accountDetailSubject.asObservable();
 
-  private isAddProductSubject = new Subject<boolean>();
-  public isAddProduct$: Observable<boolean> = this.isAddProductSubject.asObservable();
+  private cancelAccountSubject = new Subject<boolean>();
+  public cancelAccount$: Observable<boolean> = this.cancelAccountSubject.asObservable();
 
   constructor() { }
-
 
   public notifyAccount(account: Account){
     this.accountSubject.next(account);
@@ -29,9 +28,8 @@ export class CommunicationService {
     this.accountDetailSubject.next(accountDetail);
   }
 
-  public nofityAddProduct(isAddProducto: boolean){
-    this.isAddProductSubject.next(isAddProducto);
+  public nofityCancellAccount(isCancelAccount: boolean){
+    this.cancelAccountSubject.next(isCancelAccount);
   }
-
 
 }

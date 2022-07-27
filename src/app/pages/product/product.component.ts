@@ -27,7 +27,6 @@ export class ProductComponent implements OnInit {
   prueba: string = "0";
   total: number;
   priceProduct: number;
-  isAddProduct: boolean = false;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -97,7 +96,6 @@ export class ProductComponent implements OnInit {
    * @param event 
    */
    cancelProductAccount(e: any){
-    this.isAddProduct = false;
     this.accountDetailForm.get("quantity").setValue(0);
   }
 
