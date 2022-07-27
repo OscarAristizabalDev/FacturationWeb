@@ -7,11 +7,15 @@ import { DxButtonModule, DxDataGridModule, DxDateBoxModule, DxFormModule, DxNumb
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { AccountComponent } from './pages/account/account.component';
+import { ProductComponent } from './pages/product/product.component';
+import { ProductListComponent } from './pages/product-list/product-list.component';
 
 @NgModule({
   declarations: [
     AppComponent,
-    AccountComponent
+    AccountComponent,
+    ProductComponent,
+    ProductListComponent
   ],
   imports: [
     BrowserModule,

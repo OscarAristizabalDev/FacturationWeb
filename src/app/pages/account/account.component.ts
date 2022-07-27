@@ -5,8 +5,10 @@ import { CustomerService } from '../../services/customer.service';
 import { AccountService } from '../../services/account.service';
 import { Account } from 'src/app/entities/account';
 import { Product } from '../../entities/product';
+
 import { ProductService } from '../../services/product.service';
 import { AccountDetail } from '../../entities/account-detail';
+import { CommunicationService } from 'src/app/services/communication.service';
 
 @Component({
   selector: 'app-account',
@@ -18,6 +20,7 @@ export class AccountComponent implements OnInit {
   customers: Customer[] = [];
   products: Product[] = [];
   accountDetails: AccountDetail[] = [];
+  account: Account;
   // Formulario de facturas
   accountForm: FormGroup;
   customerIdControl: AbstractControl;
@@ -38,14 +41,13 @@ export class AccountComponent implements OnInit {
     private customerService: CustomerService,
     private accountService: AccountService,
     private productService: ProductService,
+    private communicationService: CommunicationService,
     private formBuilder: FormBuilder) {
   }
 
   ngOnInit(): void {
     this.buildFormAccount();
-    this.buildFormAccountDetail();
     this.getAllCustomer();
-    this.getAllProduct(); 
   }
 
   /**
@@ -54,16 +56,6 @@ export class AccountComponent implements OnInit {
   getAllCustomer() {
     this.customerService.getAllCustomer().subscribe((data: Customer[]) => {
       this.customers = data;
-    });
-  }
-
-  /**
-   * Permite consultar todos los productos
-   */
-  getAllProduct() {
-    this.productService.getAllProduct().subscribe((data: Product[]) => {
-      this.products = data;
-      console.log(this.products);
     });
   }
 
@@ -80,82 +72,15 @@ export class AccountComponent implements OnInit {
   }
 
   /**
-   * Permite construir el formulario del detalle de la factura
-   */
-  buildFormAccountDetail() {
-    this.accountDetailForm = this.formBuilder.group({
-      productId: ['', Validators.required],
-      quantity: ['', Validators.required],
-      total: ['', Validators.required],
-    });
-    this.productIdControl = this.accountDetailForm.controls['productId'];
-    this.quantityControl = this.accountDetailForm.controls['quantity'];
-  }
-
-  /**
    * Permite mostrar el formulario para agregar un producto
    */
-  displayFormProduct() {
+  saveFormProduct({ value }: FormGroup) {
+    this.account = new Account();
+    this.account.customerId = value['customerId'];
+    this.account.accountDate = value['accountDate'];
     this.isAddProduct = true;
-  }
 
-  /**
-   * Permite buscar el precio del producto seleccionado
-   * @param e 
-   */
-  onSelectProduct(e: any) {
-    this.priceProduct = this.products.find(x => x.id == e.value).price;
-    this.accountDetailForm.get("quantity").setValue(0);
-  }
-
-  /**
-   * Permite calcular el subtotal del producto agregado
-   * @param e 
-   */
-  calculateSubTotal(e: any) {
-    this.total = this.priceProduct * this.accountDetailForm.get('quantity').value;
-  }
-
-  /**
-   * Permite registrar una factura
-   */
-  addAccount(e:any ,{ value }: FormGroup) {
-
-    let account = new Account();
-    account.customerId = value['customerId'];
-    account.accountDate = value['accountDate'];
-    account.accountDetails = this.accountDetails;
-
-    this.accountService.addAccount(account).subscribe(data => {
-      this.accountDetails = [];
-
-    });
-  }
-
-  /**
-   * Permite agregar un producto a la factura
-   * @param $event 
-   * @param param1 
-   */
-  addProductAccount(e: any, { value }: FormGroup){
-    
-    
-    let accountDetail = new AccountDetail();
-    accountDetail.productId = value['productId'];
-    accountDetail.quantity = value['quantity'];
-    accountDetail.total = value['total'];
-    accountDetail.productName = this.products.find(x => x.id == value['productId']).name;
-
-    this.accountDetails.push(accountDetail);
-  }
-
-  /**
-   * Permite cancelar de agregar un producto a la factura
-   * @param event 
-   */
-  cancelProductAccount(e: any){
-    this.isAddProduct = false;
-    this.accountDetailForm.get("quantity").setValue(0);
+    this.communicationService.notifyAccount(this.account);
   }
 
 }

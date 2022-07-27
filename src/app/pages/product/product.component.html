@@ -1,0 +1,39 @@
+<form [formGroup]="accountDetailForm">
+    <div class="long-title">
+        <h4>Adicionar productos</h4>
+    </div>
+    <dx-form>
+        <dxi-item itemType="group" cssClass="first-group" [colCount]="4">
+            <dxi-item itemType="group" [colSpan]="1">
+                <dxi-item itemType="group" [colSpan]="2">
+                    <dx-select-box #product [items]="products" label="Seleccione un producto" displayExpr="name" valueExpr="id" [searchEnabled]="true" formControlName="productId" (onValueChanged)="onSelectProduct($event)" [isValid]="productIdControl.valid"></dx-select-box>
+                </dxi-item>
+            </dxi-item>
+            <dxi-item itemType="group" [colSpan]="1">
+                <dx-text-box [(value)]="prueba" [disabled]="true" label="Precio"> </dx-text-box>
+            </dxi-item>
+            <dxi-item itemType="group" [colSpan]="1">
+                <dx-number-box [min]="0" (onValueChanged)="calculateSubTotal($event)" formControlName="quantity" label="Cantidad" [isValid]="quantityControl.valid"></dx-number-box>
+            </dxi-item>
+            <dxi-item itemType="group" [colSpan]="1">
+                <dx-number-box [min]="0" formControlName="total" label="Total" [(ngModel)]="total" [disabled]="true"></dx-number-box>
+            </dxi-item>
+            <dxi-item itemType="group" [colSpan]="1">
+            </dxi-item>
+            <dxi-item itemType="group" [colSpan]="1">
+            </dxi-item>
+            <dxi-item itemType="group" [colSpan]="1">
+            </dxi-item>
+            <dxi-item itemType="group" [colSpan]="1">
+                <dxi-item itemType="group" cssClass="first-group" [colCount]="2">
+                    <dxi-item itemType="group" [colSpan]="1">
+                        <dx-button icon="check" text="Adicionar" type="success" [disabled]="!accountDetailForm.valid" (onClick)="addProductAccount($event, accountDetailForm)"></dx-button>
+                    </dxi-item>
+                    <dxi-item itemType="group" [colSpan]="1">
+                        <dx-button icon="remove" text="Cancelar" (onClick)="cancelProductAccount($event)"></dx-button>
+                    </dxi-item>
+                </dxi-item>
+            </dxi-item>
+        </dxi-item>
+    </dx-form>
+</form>
